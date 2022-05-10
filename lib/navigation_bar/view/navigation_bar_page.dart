@@ -2,6 +2,7 @@ import 'package:base_news_app/navigation_bar/cubit/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../home/home.dart';
 import '../../settings/settings.dart';
 
 class NavigationBarPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
   PageController pageController = PageController(initialPage: 0);
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const Center(child: Text('home: index 0')),
+    const HomePage(),
     const Center(child: Text('favourite: index 1')),
     const SettingsPage(),
   ];
