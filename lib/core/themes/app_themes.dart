@@ -6,11 +6,9 @@ import '../Dimension/dimension.dart';
 class AppThemes {
   static final ThemeData lightTheme = ThemeData(
     primaryColor: AppColors.primary,
-    appBarTheme:  AppBarTheme(
+    appBarTheme: AppBarTheme(
       color: AppColors.primary,
       iconTheme: const IconThemeData(color: Colors.white),
-      /*titleTextStyle: GoogleFonts.poppins(
-          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),*/
     ),
     colorScheme: const ColorScheme.light().copyWith(
       primary: AppColors.primary,
@@ -30,8 +28,7 @@ class AppThemes {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
         selectedIconTheme: IconThemeData(color: AppColors.primary),
-        unselectedIconTheme: const IconThemeData(color: Colors.black45)
-    ),
+        unselectedIconTheme: const IconThemeData(color: Colors.black45)),
     textTheme: TextTheme(
         headline1: TextStyle(
             color: AppColors.Text_Color,
@@ -71,15 +68,13 @@ class AppThemes {
     appBarTheme: const AppBarTheme(
       color: Colors.black,
       iconTheme: IconThemeData(color: Colors.white),
-      /*titleTextStyle: GoogleFonts.poppins(
-          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 16),*/
     ),
     colorScheme: const ColorScheme.light().copyWith(
       primary: AppColors.primary,
     ),
     primaryColorDark: AppColors.primary,
     primaryColorLight: AppColors.Primary_Lite,
-    scaffoldBackgroundColor: AppColors.darkBackGroundColor,
+    scaffoldBackgroundColor: AppColors.Primary_Dark,
     dividerColor: Colors.grey,
     bottomAppBarColor: Colors.black,
     bottomSheetTheme: const BottomSheetThemeData(
@@ -91,12 +86,11 @@ class AppThemes {
     ),
     iconTheme: IconThemeData(color: AppColors.white),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.black,
-      selectedIconTheme: IconThemeData(color: AppColors.primary),
-      unselectedIconTheme: IconThemeData(color: AppColors.white),
-      selectedItemColor: AppColors.primary,
-      unselectedItemColor: AppColors.white
-    ),
+        backgroundColor: Colors.black,
+        selectedIconTheme: IconThemeData(color: AppColors.primary),
+        unselectedIconTheme: IconThemeData(color: AppColors.white),
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.white),
     textTheme: TextTheme(
         headline1: TextStyle(
             color: AppColors.white,
