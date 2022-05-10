@@ -33,11 +33,14 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
               physics: const NeverScrollableScrollPhysics(),
             ),
             bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Theme.of(context).bottomAppBarColor,
               currentIndex: state,
               onTap: (index) {
                 context.read<BottomNavCubit>().onItemTapped(index);
                 changeTab(index);
               },
+              selectedIconTheme: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme,
+              unselectedIconTheme: Theme.of(context).bottomNavigationBarTheme.unselectedIconTheme,
               items: const [
                 BottomNavigationBarItem(
                     label: 'home',

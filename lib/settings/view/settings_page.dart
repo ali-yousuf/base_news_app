@@ -10,18 +10,28 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Settings'),
+        title: Text(
+          'Settings',
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: BlocBuilder<ThemeCubit, bool>(
         builder: (context, state) {
           return SwitchListTile(
-            title: const Text('Dark Theme'),
+            title: Text('Dark Theme',
+                style: Theme.of(context).textTheme.headline1),
             value: state,
             onChanged: (bool value) {
               context.read<ThemeCubit>().onThemeChanged(value);
             },
-            subtitle: const Text('Light text against dark background'),
-            secondary: const Icon(Icons.lightbulb_outline),
+            subtitle: Text(
+              'Light text against dark background',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            secondary: Icon(
+              Icons.lightbulb_outline,
+              color: Theme.of(context).iconTheme.color,
+            ),
           );
         },
       ),
