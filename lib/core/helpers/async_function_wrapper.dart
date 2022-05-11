@@ -79,9 +79,6 @@ Future<T> asyncFunctionWrapper<T>(
           backgroundColor: Colors.red,
         ),
       );
-      if (e is AuthenticationFailure) {
-        // context.read<AuthenticationNotifier>().logout();
-      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
