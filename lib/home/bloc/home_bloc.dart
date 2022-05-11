@@ -18,13 +18,17 @@ const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb6';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.httpClient}) : super(const HomeState()) {
-    on<NewsListFetched>(_onNewsFetched);
+    on<NewsListFetched>((event, emit) async {
+      await _onNewsFetched(emit);
+    });
+    on<NewsListReFetched>((event, emit) async {
+      await _onNewsFetched(emit);
+    });
   }
 
   final BaseHttpClient httpClient;
 
   Future<void> _onNewsFetched(
-    NewsListFetched event,
     Emitter<HomeState> emit,
   ) async {
     if (state.hasReachedMax) return;

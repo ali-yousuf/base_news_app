@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRefresh(BuildContext ctx) {
-    ctx.read<HomeBloc>().add(NewsListFetched());
+    ctx.read<HomeBloc>().add(NewsListReFetched());
   }
 
   @override
