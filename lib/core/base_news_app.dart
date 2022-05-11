@@ -1,5 +1,4 @@
 import 'package:base_news_app/core/constants.dart';
-import 'package:base_news_app/core/themes/app_themes.dart';
 import 'package:base_news_app/navigation_bar/view/navigation_bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

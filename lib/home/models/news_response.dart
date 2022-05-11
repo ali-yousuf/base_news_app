@@ -132,7 +132,7 @@ class Article extends BaseApiResponse {
 }
 
 class Source extends BaseApiResponse {
-  final int id;
+  final String id;
   final String name;
 
   const Source({required this.id, required this.name});
@@ -150,7 +150,7 @@ class Source extends BaseApiResponse {
   }
 
   factory Source.fromMap(Map<String, dynamic> map) {
-    return Source(id: map['id'] ?? 0, name: map['name'] ?? '');
+    return Source(id: map['id'] ?? '', name: map['name'] ?? '');
   }
 
   String toJson() => json.encode(toMap());

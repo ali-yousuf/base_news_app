@@ -14,7 +14,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(this.httpClient) : super(const HomeState()) {
+  HomeBloc({required this.httpClient}) : super(const HomeState()) {
     on<NewsListFetched>(_onNewsFetched);
   }
 
@@ -24,6 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     NewsListFetched event,
     Emitter<HomeState> emit,
   ) async {
+    print('HomeBloc._onNewsFetched');
     if (state.hasReachedMax) return;
     try {
       if (state.status == HomeStatus.initial) {
@@ -36,27 +37,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
       }
       final articles = await _fetchNews();
-      articles.isEmpty
+      articles!.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(state.copyWith(
               status: HomeStatus.success,
-              articles: List.of(state.articles!)..addAll(articles),
+              articles: List.of(state.articles)..addAll(articles),
               hasReachedMax: false));
     } catch (_) {
       emit(state.copyWith(status: HomeStatus.failure));
     }
   }
 
-  Future<List<Article>> _fetchNews([int startIndex = 1]) async {
+  Future<List<Article>?> _fetchNews([int startIndex = 1]) async {
     final data = await httpCallWrapper(() async {
       log('top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1');
       final response = await httpClient.authenticatedClient.get(
         'top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1',
       );
 
-      final data = NewsResponse.fromMap(response.data);
-      return data;
+      try {
+        final data = NewsResponse.fromMap(response.data);
+        return data;
+      } catch (_, st) {
+        log(st.toString());
+      }
     });
-    return data.articles!;
+    return data?.articles!;
   }
 }
