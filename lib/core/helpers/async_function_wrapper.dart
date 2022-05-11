@@ -28,9 +28,8 @@ Future<T> httpCallWrapper<T>(Future<T> Function() func) async {
     } else if (e.response?.statusCode == 404) {
       throw NotFoundFailure(message: '404 Not Found');
     } else if (e.response?.statusCode == 401) {
-      print('httpCallWrapper');
-      throw ApiKeyInvalid(
-          message: e.message);
+      final response = ApiErrorResponse.fromMap(e.response?.data);
+      throw ApiKeyInvalid(message: response.message);
     } else if (e.response?.statusCode == 403) {
       throw AuthorizationFailure(
           message: '${e.response?.statusCode} - Unauthorized');

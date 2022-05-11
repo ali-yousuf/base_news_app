@@ -20,6 +20,7 @@ void main() {
       log('runzoned error');
       log(error.runtimeType.toString());
       log(error.toString(), stackTrace: stackTrace);
+      handleError(error);
     },
   );
 }

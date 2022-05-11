@@ -14,7 +14,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 const _pageSize = 20;
-const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb6';
+const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.httpClient}) : super(const HomeState()) {
@@ -53,6 +53,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               page: state.page + 1));
     } catch (_) {
       emit(state.copyWith(status: HomeStatus.failure));
+      rethrow;
     }
   }
 
@@ -62,14 +63,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final response = await httpClient.authenticatedClient.get(
         'top-headlines?country=us&apiKey=$apiKey&pageSize=$_pageSize&page=$startIndex',
       );
-
-      try {
-        final data = NewsResponse.fromMap(response.data);
-        return data;
-      } catch (_, st) {
-        log(st.toString());
-      }
+      final data = NewsResponse.fromMap(response.data);
+      return data;
     });
-    return data?.articles!;
+    return data.articles!;
   }
 }
