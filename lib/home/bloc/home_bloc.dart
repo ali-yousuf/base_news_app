@@ -1,17 +1,62 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:base_news_app/core/network/http_client.dart';
 import 'package:base_news_app/home/models/news_response.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import '../../core/helpers.dart';
 
 part 'home_event.dart';
+
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const HomeState().copyWith()) {
-    on<HomeEvent>((event, emit) {
-      // TODO: implement event handler
+  HomeBloc(this.httpClient) : super(const HomeState()) {
+    on<NewsListFetched>(_onNewsFetched);
+  }
+
+  final BaseHttpClient httpClient;
+
+  Future<void> _onNewsFetched(
+    NewsListFetched event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state.hasReachedMax) return;
+    try {
+      if (state.status == HomeStatus.initial) {
+        final articles = await _fetchNews();
+        return emit(
+          state.copyWith(
+              status: HomeStatus.success,
+              articles: articles,
+              hasReachedMax: false),
+        );
+      }
+      final articles = await _fetchNews();
+      articles.isEmpty
+          ? emit(state.copyWith(hasReachedMax: true))
+          : emit(state.copyWith(
+              status: HomeStatus.success,
+              articles: List.of(state.articles!)..addAll(articles),
+              hasReachedMax: false));
+    } catch (_) {
+      emit(state.copyWith(status: HomeStatus.failure));
+    }
+  }
+
+  Future<List<Article>> _fetchNews([int startIndex = 1]) async {
+    final data = await httpCallWrapper(() async {
+      log('top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1');
+      final response = await httpClient.authenticatedClient.get(
+        'top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1',
+      );
+
+      final data = NewsResponse.fromMap(response.data);
+      return data;
     });
+    return data.articles!;
   }
 }
