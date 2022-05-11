@@ -13,6 +13,9 @@ part 'home_event.dart';
 
 part 'home_state.dart';
 
+const _pageSize = 20;
+const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb6';
+
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.httpClient}) : super(const HomeState()) {
     on<NewsListFetched>(_onNewsFetched);
@@ -24,7 +27,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     NewsListFetched event,
     Emitter<HomeState> emit,
   ) async {
-    print('HomeBloc._onNewsFetched');
     if (state.hasReachedMax) return;
     try {
       if (state.status == HomeStatus.initial) {
@@ -33,16 +35,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           state.copyWith(
               status: HomeStatus.success,
               articles: articles,
-              hasReachedMax: false),
+              hasReachedMax: false,
+              page: state.page + 1),
         );
       }
-      final articles = await _fetchNews();
+      final articles = await _fetchNews(state.page);
       articles!.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(state.copyWith(
               status: HomeStatus.success,
               articles: List.of(state.articles)..addAll(articles),
-              hasReachedMax: false));
+              hasReachedMax: false,
+              page: state.page + 1));
     } catch (_) {
       emit(state.copyWith(status: HomeStatus.failure));
     }
@@ -50,9 +54,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<List<Article>?> _fetchNews([int startIndex = 1]) async {
     final data = await httpCallWrapper(() async {
-      log('top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1');
+      log('top-headlines?country=us&apiKey=$apiKey&pageSize=$_pageSize&page=$startIndex');
       final response = await httpClient.authenticatedClient.get(
-        'top-headlines?country=us&apiKey=4c61ba3397134cccacc3cc3e0cf7edb6&pageSize=20&page=1',
+        'top-headlines?country=us&apiKey=$apiKey&pageSize=$_pageSize&page=$startIndex',
       );
 
       try {

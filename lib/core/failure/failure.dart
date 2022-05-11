@@ -47,3 +47,7 @@ class PreConditionFailure extends Failure {
 class GeneralFailure extends Failure {
   GeneralFailure({required String message}) : super(message);
 }
+
+class ApiKeyInvalid extends Failure {
+  ApiKeyInvalid({required String message}) : super(message);
+}

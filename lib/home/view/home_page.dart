@@ -29,6 +29,14 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  void _onLoading(BuildContext ctx) {
+    ctx.read<HomeBloc>().add(NewsListFetched());
+  }
+
+  void _onRefresh(BuildContext ctx) {
+    ctx.read<HomeBloc>().add(NewsListFetched());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -42,6 +50,9 @@ class _HomePageState extends State<HomePage> {
             case HomeStatus.success:
               return SmartRefresher(
                 controller: _refreshController,
+                enablePullUp: !state.hasReachedMax,
+                onLoading: () => _onLoading(context),
+                onRefresh: () => _onRefresh(context),
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: ListView.builder(
@@ -71,7 +82,10 @@ class NewsItem extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
+      child: Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(10)),
         height: 130,
         child: Row(
           children: [
@@ -82,7 +96,10 @@ class NewsItem extends StatelessWidget {
                 width: 140,
                 height: 130,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(height: 140, color: Colors.grey,),
+                placeholder: (context, url) => Container(
+                  height: 140,
+                  color: Colors.grey,
+                ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
@@ -101,6 +118,7 @@ class NewsItem extends StatelessWidget {
                   Text(
                     article.author!,
                     style: textTheme.subtitle1,
+                    maxLines: 1,
                   )
                 ],
               ),

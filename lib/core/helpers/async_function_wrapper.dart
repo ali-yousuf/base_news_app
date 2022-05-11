@@ -28,8 +28,9 @@ Future<T> httpCallWrapper<T>(Future<T> Function() func) async {
     } else if (e.response?.statusCode == 404) {
       throw NotFoundFailure(message: '404 Not Found');
     } else if (e.response?.statusCode == 401) {
-      throw AuthenticationFailure(
-          message: '${e.response?.statusCode} - Please login first!');
+      print('httpCallWrapper');
+      throw ApiKeyInvalid(
+          message: e.message);
     } else if (e.response?.statusCode == 403) {
       throw AuthorizationFailure(
           message: '${e.response?.statusCode} - Unauthorized');
@@ -37,7 +38,7 @@ Future<T> httpCallWrapper<T>(Future<T> Function() func) async {
       final response = ApiErrorResponse.fromMap(e.response!.data);
       throw UnprocessableEntityFailure(
         error: response,
-        message: '${e.response?.statusCode} - ${response.getErrorValue()}',
+        message: '${e.response?.statusCode}',
       );
     } else if (e.response?.statusCode == 429) {
       throw TooManyRequestFailure(
