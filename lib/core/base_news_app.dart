@@ -19,7 +19,7 @@ class BaseNewsApp extends StatelessWidget {
             navigatorKey: navigatorKey,
             title: Constants.appName,
             debugShowCheckedModeBanner: false,
-            theme: state ? AppThemes.darkTheme : AppThemes.lightTheme,
+            theme: state ? ThemeData.dark() : ThemeData.light(),
             home: const NavigationBarPage(),
           );
         },
