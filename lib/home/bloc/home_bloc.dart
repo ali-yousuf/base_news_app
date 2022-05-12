@@ -14,7 +14,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 const _pageSize = 20;
-const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb';
+const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb6';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.httpClient}) : super(const HomeState()) {

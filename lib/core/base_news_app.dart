@@ -11,7 +11,7 @@ class BaseNewsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ThemeCubit(),
+      create: (context) => ThemeCubit()..getInitialSate(),
       child: BlocBuilder<ThemeCubit, bool>(
         builder: (context, state) {
           return MaterialApp(
