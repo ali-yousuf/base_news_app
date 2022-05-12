@@ -2,6 +2,7 @@ import 'package:base_news_app/core/di/dependency_injection.dart';
 import 'package:base_news_app/core/network/http_client.dart';
 import 'package:base_news_app/home/bloc/home_bloc.dart';
 import 'package:base_news_app/home/models/news_response.dart';
+import 'package:base_news_app/news_details/view/news_details_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,50 +81,58 @@ class NewsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(10)),
-        height: 130,
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: article.urlToImage!,
-                width: 140,
-                height: 130,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  height: 140,
-                  color: Colors.grey,
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    article.title!,
-                    style: textTheme.headline6,
-                    maxLines: 4,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => NewsDetailsPage(
+                  article: article,
+                )));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(10)),
+          height: 130,
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: article.urlToImage!,
+                  width: 140,
+                  height: 130,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    height: 140,
+                    color: Colors.grey,
                   ),
-                  Text(
-                    article.author!,
-                    style: textTheme.subtitle1,
-                    maxLines: 1,
-                  )
-                ],
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
-            )
-          ],
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      article.title!,
+                      style: textTheme.headline6,
+                      maxLines: 4,
+                    ),
+                    Text(
+                      article.author!,
+                      style: textTheme.subtitle1,
+                      maxLines: 1,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
