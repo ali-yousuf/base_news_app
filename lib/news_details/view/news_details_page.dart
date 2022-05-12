@@ -1,5 +1,8 @@
+import 'package:base_news_app/favourite/cubit/favourite_cubit.dart';
+import 'package:base_news_app/favourite/models/favourite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../home/models/news_response.dart';
 
@@ -10,6 +13,7 @@ class NewsDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final iconTheme = Theme.of(context).iconTheme;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -17,8 +21,30 @@ class NewsDetailsPage extends StatelessWidget {
             automaticallyImplyLeading: true,
             title: Text(article.title!),
             actions: [
-              IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.favorite_border))
+              IconButton(onPressed: () {
+                if (isFavouritesContainsThisArticle(
+                    context.read<FavouriteCubit>().state.favourites!,
+                    article)) {
+                  context
+                      .read<FavouriteCubit>()
+                      .deleteArticleFromFavourite(article);
+                } else {
+                  context.read<FavouriteCubit>().insertIntoFavourite(article);
+                }
+              }, icon: BlocBuilder<FavouriteCubit, FavouriteState>(
+                builder: (context, state) {
+                  return isFavouritesContainsThisArticle(
+                          state.favourites!, article)
+                      ? Icon(
+                          Icons.favorite,
+                          color: iconTheme.color,
+                        )
+                      : Icon(
+                          Icons.favorite_border,
+                          color: iconTheme.color,
+                        );
+                },
+              ))
             ],
           ),
           SliverToBoxAdapter(
@@ -64,5 +90,16 @@ class NewsDetailsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool isFavouritesContainsThisArticle(
+      List<Favourite> favourites, Article article) {
+    bool isArticleMatch = false;
+    for (var element in favourites) {
+      if (element.title == article.title) {
+        isArticleMatch = true;
+      }
+    }
+    return isArticleMatch;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:base_news_app/favourite/models/favourite.dart';
 import 'package:base_news_app/home/models/news_response.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,26 +26,25 @@ class NewsDatabase {
 
   FutureOr<void> _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE favourite(source Source, author TEXT, title TEXT, description TEXT, url TEXT, urlToImage TEXT, publishedAt TEXT, content TEXT)');
+        'CREATE TABLE favourite(id INTEGER PRIMARY KEY AUTOINCREMENT, author TEXT, title TEXT, description TEXT, url TEXT, urlToImage TEXT, publishedAt TEXT, content TEXT)');
   }
 
-  Future<void> insertDog(Article article) async {
+  Future<void> insertArticle(Favourite favourite) async {
     final db = await database;
     await db.insert(
       'favourite',
-      article.toMap(),
+      favourite.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<List<Article>> getArticles() async {
+  Future<List<Favourite>> getArticles() async {
     final db = await database;
 
     final List<Map<String, dynamic>> maps = await db.query('favourite');
-
     return List.generate(maps.length, (i) {
-      return Article(
-          source: maps[i]['source'],
+      return Favourite(
+          id: maps[i]['id'],
           author: maps[i]['author'],
           title: maps[i]['title'],
           description: maps[i]['description'],
@@ -55,13 +55,13 @@ class NewsDatabase {
     });
   }
 
-  Future<void> deleteArticle(int id) async {
+  Future<void> deleteFavorite(String title) async {
     final db = await database;
 
     await db.delete(
       'favourite',
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'title = ?',
+      whereArgs: [title],
     );
   }
 }
