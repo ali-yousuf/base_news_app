@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:base_news_app/core/di/dependency_injection.dart';
 import 'package:base_news_app/core/network/http_client.dart';
 import 'package:base_news_app/home/bloc/home_bloc.dart';
@@ -35,7 +37,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRefresh(BuildContext ctx) {
+    print('_HomePageState._onRefresh');
     ctx.read<HomeBloc>().add(NewsListReFetched());
+  }
+
+  void _onListener(BuildContext ctx, HomeState state) {
+    if (state.status == HomeStatus.success) {
+      _refreshController
+        ..loadComplete()
+        ..refreshCompleted();
+    } else if (state.status == HomeStatus.failure) {
+      _refreshController
+        ..loadComplete()
+        ..refreshCompleted();
+    }
   }
 
   @override
@@ -43,7 +58,8 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (context) => HomeBloc(httpClient: sl.get<BaseHttpClient>())
         ..add(NewsListFetched()),
-      child: BlocBuilder<HomeBloc, HomeState>(
+      child: BlocConsumer<HomeBloc, HomeState>(
+        listener: _onListener,
         builder: (context, state) {
           switch (state.status) {
             case HomeStatus.initial:
