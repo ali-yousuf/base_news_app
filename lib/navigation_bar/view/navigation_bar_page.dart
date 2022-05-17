@@ -1,3 +1,4 @@
+import 'package:base_news_app/favourite/view/favourite_page.dart';
 import 'package:base_news_app/navigation_bar/cubit/bottom_nav_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
-    const Center(child: Text('favourite: index 1')),
+    const FavouritePage(),
     const SettingsPage(),
   ];
 

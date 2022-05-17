@@ -42,6 +42,10 @@ dependencies:
   pull_to_refresh: ^2.0.0
   rxdart: ^0.27.3
   flash: ^2.0.3+2
+  sqflite: ^2.0.2+1
+  path: ^1.8.0
+  get_storage: ^2.0.3
+
 
 dev_dependencies:
   flutter_test:

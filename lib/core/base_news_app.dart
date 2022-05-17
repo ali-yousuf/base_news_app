@@ -3,6 +3,7 @@ import 'package:base_news_app/navigation_bar/view/navigation_bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../favourite/cubit/favourite_cubit.dart';
 import '../settings/settings.dart';
 
 class BaseNewsApp extends StatelessWidget {
@@ -10,8 +11,13 @@ class BaseNewsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ThemeCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ThemeCubit()..getInitialSate()),
+        BlocProvider(
+            lazy: false,
+            create: (context) => FavouriteCubit()..getFavourites()),
+      ],
       child: BlocBuilder<ThemeCubit, bool>(
         builder: (context, state) {
           return MaterialApp(

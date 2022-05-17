@@ -14,7 +14,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 const _pageSize = 20;
-const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb';
+const apiKey = '4c61ba3397134cccacc3cc3e0cf7edb6';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.httpClient}) : super(const HomeState()) {
@@ -22,32 +22,34 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await _onNewsFetched(emit);
     });
     on<NewsListReFetched>((event, emit) async {
-      await _onNewsFetched(emit);
+      await _onNewsFetched(emit, isReFetched: true);
     });
   }
 
   final BaseHttpClient httpClient;
 
-  Future<void> _onNewsFetched(
-    Emitter<HomeState> emit,
-  ) async {
+  Future<void> _onNewsFetched(Emitter<HomeState> emit,
+      {bool isReFetched = false}) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == HomeStatus.initial) {
+      if (state.status == HomeStatus.initial || isReFetched) {
         final articles = await _fetchNews();
-        return emit(
+        emit(
           state.copyWith(
+              isRefresh: isReFetched,
               status: HomeStatus.success,
               articles: articles,
               hasReachedMax: false,
-              page: state.page + 1),
+              page: isReFetched ? 1 : state.page + 1),
         );
+        emit(state.copyWith(isRefresh: false));
       }
       final articles = await _fetchNews(state.page);
       articles!.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(state.copyWith(
               status: HomeStatus.success,
+              isRefresh: false,
               articles: List.of(state.articles)..addAll(articles),
               hasReachedMax: false,
               page: state.page + 1));

@@ -5,6 +5,7 @@ import 'package:base_news_app/core/base_news_app.dart';
 import 'package:base_news_app/core/di/dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'core/helpers.dart';
 
@@ -12,6 +13,7 @@ void main() {
   runZonedGuarded(
     () async {
       BlocOverrides.runZoned(() async {
+        await GetStorage.init();
         setup();
         runApp(const BaseNewsApp());
       }, blocObserver: AppBlocObserver());

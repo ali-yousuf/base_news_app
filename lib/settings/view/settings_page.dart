@@ -2,9 +2,15 @@ import 'package:base_news_app/settings/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +23,9 @@ class SettingsPage extends StatelessWidget {
       body: BlocBuilder<ThemeCubit, bool>(
         builder: (context, state) {
           return SwitchListTile(
-            title: const Text('Dark Theme',),
+            title: const Text(
+              'Dark Theme',
+            ),
             value: state,
             onChanged: (bool value) {
               context.read<ThemeCubit>().onThemeChanged(value);
@@ -33,4 +41,8 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
