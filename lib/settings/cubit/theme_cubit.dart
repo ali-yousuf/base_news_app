@@ -5,15 +5,10 @@ import 'package:bloc/bloc.dart';
 import 'package:get_storage/get_storage.dart';
 
 class ThemeCubit extends Cubit<bool> {
-  ThemeCubit() : super(false);
-  final _prefs = GetStorage();
-
-  void getInitialSate() {
-    var value = _prefs.read(Constants.isDarkThemeEnable);
-    emit(value ?? false);
-  }
+  ThemeCubit(bool isDark) : super(isDark);
 
   void onThemeChanged(bool isDark) {
+    final _prefs = GetStorage();
     _prefs.write(Constants.isDarkThemeEnable, isDark);
     emit(isDark);
   }
