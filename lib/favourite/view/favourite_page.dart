@@ -34,13 +34,14 @@ class _FavouritePageState extends State<FavouritePage> {
                     itemBuilder: (context, index) {
                       return NewsItem(favourite: state.favourites![index]);
                     })
-                : const Center(child: Text('favourites: null'));
+                : const Center(child: Text('No item added!'));
           default:
             return const Center(child: Text('Something went wrong!'));
         }
       },
     );
   }
+
 }
 
 class NewsItem extends StatelessWidget {
