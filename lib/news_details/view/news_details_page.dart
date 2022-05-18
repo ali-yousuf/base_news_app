@@ -56,10 +56,10 @@ class NewsDetailsPage extends StatelessWidget {
                   CachedNetworkImage(
                     imageUrl: article.urlToImage!,
                     width: double.infinity,
-                    height: 130,
+                    height: 200,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      height: 140,
+                      height: 200,
                       color: Colors.grey,
                     ),
                     errorWidget: (context, url, error) =>
